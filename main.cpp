@@ -9,7 +9,10 @@
 #include <stdlib.h>
 #include <cstring>
 using namespace std;
-void Permutaciones(char *, int l=0);
+/* Tipo nodo para árbol o Lista de árboles*/
+/* El propósito es dual, sirve como elemento de una lista enlazada */
+/* Cuando se usa el puntero sig, y como elemento de un árbol cuando */
+/* se usan los punteros cero y uno */
 typedef struct _nodo
 {
    char letra;      /* Letra a la que hace referencia el nodo */
@@ -48,12 +51,12 @@ int comprimir(int argc, char *argv[])
 
    FILE *fe, *fs;         /* Ficheros de entrada y salida */
    char c;                /* variables auxiliares */
-   tipoNodo *p,*q;
+   tipoNodo *p;
    tipoTabla *t;
    int nElementos;        /* Número de elementos en tabla */
    long int Longitud = 0; /* Longitud del fichero original */
 
-   unsigned long int dWORD,bits; /* Soble palabra usada durante la codificación */
+   unsigned long int dWORD; /* Soble palabra usada durante la codificación */
    int nBits;               /* Número de bits usados de dWORD */
 
    if(argc < 3)
@@ -309,120 +312,134 @@ void BorrarArbol(tipoNodo *n)
    if(n->uno)  BorrarArbol(n->uno);
    free(n);
 }
+/* Tipo nodo para árbol */
+typedef struct _noda
+{
+   char letras;             /* letras a la que hace referencia el nodo */
+   unsigned long int bitios; /* Valor de la codificación de la letras */
+   char nbitios;             /* Número de bitios de la codificación */
+   _noda *cero;            /* Puntero a la rama cero de un árbol */
+   _noda *uno;             /* Puntero a la rama uno de un árbol */
+} tipoNoda;                /* Nombre del tipo */
 
-int descomprimir(int argc, char *argv[])
-{  tipoNodo *Arbol;        /* Arbol de codificación */
-   long int Longitud;      /* Longitud de fichero */
-   int nElementos;         /* Elementos de árbol */
-   unsigned long int bits; /* Almacen de bits para decodificación */
+/* Funciones prototipo */
+void BorrarArbolito(tipoNoda *n);
+
+int descomprimir(int argz, char *argt[])
+{
+   tipoNoda *Arbolito;        /* Arbolito de codificación */
+   long int Largo;      /* Largo de fichero */
+   int nElementas;         /* Elementos de árbol */
+   unsigned long int bitios; /* Almacen de bitios para decodificación */
    FILE *fe, *fs;          /* Ficheros de entrada y salida */
 
-   tipoNodo *p, *q;        /* Auxiliares */
+   tipoNoda *p, *q;        /* Auxiliares */
    unsigned char a;
    int i, j;
 
-   if(argc < 3)
+   if(argz < 3)
    {
-      printf("Usar:\n%s <fichero_entrada> <fichero_salida>\n", argv[0]);
+      printf("Usar:\n%s <fichero_entrada> <fichero_salida>\n", argt[0]);
       return 1;
    }
 
-   /* Crear un arbol con la información de la tabla */
-   Arbol = (tipoNodo *)malloc(sizeof(tipoNodo)); /* un nodo nuevo */
-   Arbol->letra = 0;
-   Arbol->uno = Arbol->cero = NULL;
-   fe = fopen(argv[1], "rb");
-   fread(&Longitud, sizeof(long int), 1, fe); /* Lee el número de caracteres */
-   fread(&nElementos, sizeof(int), 1, fe); /* Lee el número de elementos */
-   for(i = 0; i < nElementos; i++) /* Leer todos los elementos */
+   /* Crear un Arbolito con la información de la tabla */
+   Arbolito = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
+   Arbolito->letras = 0;
+   Arbolito->uno = Arbolito->cero = NULL;
+   fe = fopen(argt[1], "rb");
+   fread(&Largo, sizeof(long int), 1, fe); /* Lee el número de caracteres */
+   fread(&nElementas, sizeof(int), 1, fe); /* Lee el número de elementos */
+   for(i = 0; i < nElementas; i++) /* Leer todos los elementos */
    {
-      p = (tipoNodo *)malloc(sizeof(tipoNodo)); /* un nodo nuevo */
-      fread(&p->letra, sizeof(char), 1, fe); /* Lee el carácter */
-     /* fread(&p->bits, sizeof(unsigned long int), 1, fe); /* Lee el código */
-     /* fread(&p->nbits, sizeof(char), 1, fe); /* Lee la longitud */
+      p = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
+      fread(&p->letras, sizeof(char), 1, fe); /* Lee el carácter */
+      fread(&p->bitios, sizeof(unsigned long int), 1, fe); /* Lee el código */
+      fread(&p->nbitios, sizeof(char), 1, fe); /* Lee la Largo */
       p->cero = p->uno = NULL;
       /* Insertar el nodo en su lugar */
-      /* j = 1 << (p->nbits-1);
-      q = Arbol;
+      j = 1 << (p->nbitios-1);
+      q = Arbolito;
       while(j > 1)
       {
-         if(p->bits & j) /* es un uno*/
+         if(p->bitios & j) /* es un uno*/
             if(q->uno) q = q->uno;   /* Si el nodo existe, nos movemos a él */
             else                     /* Si no existe, lo creamos */
             {
-               q->uno = (tipoNodo *)malloc(sizeof(tipoNodo)); /* un nodo nuevo */
+               q->uno = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
                q = q->uno;
-               q->letra = 0;
+               q->letras = 0;
                q->uno = q->cero = NULL;
-            };
-            /* es un cero */
+            }
+         else /* es un cero */
             if(q->cero) q = q->cero; /* Si el nodo existe, nos movemos a él */
             else                     /* Si no existe, lo creamos */
             {
-               q->cero = (tipoNodo *)malloc(sizeof(tipoNodo)); /* un nodo nuevo */
+               q->cero = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
                q = q->cero;
-               q->letra = 0;
+               q->letras = 0;
                q->uno = q->cero = NULL;
             }
          j >>= 1;  /* Siguiente bit */
       }
       /* Ultimo Bit */
-      /*if(p->bits & 1) /* es un uno*/
-       /*  q->uno = p;
+      if(p->bitios & 1) /* es un uno*/
+         q->uno = p;
       else            /* es un cero */
-         /*q->cero = p;
+         q->cero = p;
    }
    /* Leer datos comprimidos y extraer al fichero de salida */
-   bits = 0;
-   fs = fopen(argv[2], "w");
-   /* Lee los primeros cuatro bytes en la dobel palabra bits */
+   bitios = 0;
+   fs = fopen(argt[2], "w");
+   /* Lee los primeros cuatro bytes en la dobel palabra bitios */
    fread(&a, sizeof(char), 1, fe);
-   bits |= a;
-   bits <<= 8;
+   bitios |= a;
+   bitios <<= 8;
    fread(&a, sizeof(char), 1, fe);
-   bits |= a;
-   bits <<= 8;
+   bitios |= a;
+   bitios <<= 8;
    fread(&a, sizeof(char), 1, fe);
-   bits |= a;
-   bits <<= 8;
+   bitios |= a;
+   bitios <<= 8;
    fread(&a, sizeof(char), 1, fe);
-   bits |= a;
-   j = 0; /* Cada 8 bits leemos otro byte */
-   q = Arbol;
+   bitios |= a;
+   j = 0; /* Cada 8 bitios leemos otro byte */
+   q = Arbolito;
    /* Bucle */
    do {
-      if(bits & 0x80000000) q = q->uno; else q = q->cero; /* Rama adecuada */
-      bits <<= 1;           /* Siguiente bit */
+      if(bitios & 0x80000000) q = q->uno; else q = q->cero; /* Rama adecuada */
+      bitios <<= 1;           /* Siguiente bit */
       j++;
-      if(8 == j)            /* Cada 8 bits */
+      if(8 == j)            /* Cada 8 bitios */
       {
          i = fread(&a, sizeof(char), 1, fe); /* Leemos un byte desde el fichero */
-         bits |= a;                    /* Y lo insertamos en bits */
+         bitios |= a;                    /* Y lo insertamos en bitios */
          j = 0;                        /* No quedan huecos */
       }
-      if(!q->uno && !q->cero)          /* Si el nodo es una letra */
+      if(!q->uno && !q->cero)          /* Si el nodo es una letras */
       {
-         putc(q->letra, fs);           /* La escribimos en el fich de salida */
-         Longitud--;                   /* Actualizamos longitud que queda */
-         q=Arbol;                      /* Volvemos a la raiz del árbol */
+         putc(q->letras, fs);           /* La escribimos en el fich de salida */
+         Largo--;                   /* Actualizamos Largo que queda */
+         q=Arbolito;                      /* Volvemos a la raiz del árbol */
       }
-   } while(Longitud);                  /* Hasta que acabe el fichero */
+   } while(Largo);                  /* Hasta que acabe el fichero */
    /* Procesar la cola */
 
    fclose(fs);                         /* Cerramos ficheros */
    fclose(fe);
 
-   BorrarArbol(Arbol);                 /* Borramos el árbol */
+   BorrarArbolito(Arbolito);                 /* Borramos el árbol */
    return 0;
 }
 
-/* Función recursiva para borrar un arbol */
-/* void BorrarArbol(tipoNodo *n)
+/* Función recursiva para borrar un Arbolito */
+void BorrarArbolito(tipoNoda *n)
 {
-   if(n->cero) BorrarArbol(n->cero);
-   if(n->uno)  BorrarArbol(n->uno);
+   if(n->cero) BorrarArbolito(n->cero);
+   if(n->uno)  BorrarArbolito(n->uno);
    free(n);
-}; */
+}
+
 void printPermutations(char *str, char* permutations, int last, int index){
    int i, len = strlen(str);
    for ( i = 0; i < len; i++ ) {
