@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1583692263 source:c:\users\jemate ael\desktop\compresortgz\main.cpp
+	<string>
+	<vector>
+	<iostream>
+	<algorithm>
+	<array>
+	<fstream>
+	<stdio.h>
+	<stdlib.h>
+	<cstring>
+
+1584028794 source:c:\users\administrador\desktop\compresortgz\main.cpp
+	<string>
+	<vector>
+	<iostream>
+	<algorithm>
+	<array>
+	<fstream>
+	<stdio.h>
+	<stdlib.h>
+	<cstring>
+

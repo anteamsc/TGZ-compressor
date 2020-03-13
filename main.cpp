@@ -427,8 +427,11 @@ void printPermutations(char *str, char* permutations, int last, int index){
    int i, len = strlen(str);
    for ( i = 0; i < len; i++ ) {
       permutations[index] = str[i] ;
-      if (index == last)
+      if (index == last) {
+
+      permutations[last+1] = '\0';
          cout<<permutations <<"\t";
+      }
       else
          printPermutations (str, permutations, last, index+1);}}
 
