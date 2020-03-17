@@ -478,11 +478,12 @@ int main(int argm, char *argn[])
                 break;
 
             case 2:{
-                    /*comprimir(1,"genoma.dat");*/}
+                    comprimir(argm,&*argn);}
 
                 break;
 
-            case 3:/*descomprimir(2,"genoma.tgz");*/
+            case 3:{
+                    descomprimir(argm,&*argn);}
 
                 break;
 
