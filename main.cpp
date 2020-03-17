@@ -67,7 +67,7 @@ int comprimir(int argc, char *argv[])
 
    Lista = NULL;
    /* Fase 1: contar frecuencias */
-   fe = fopen(argv[1], "r");
+   fe = fopen(argv[1], "genoma.dat");
    while((c = fgetc(fe)) != EOF)
    {
       Longitud++;       /* Actualiza la cuenta de la longitud del fichero */
@@ -98,7 +98,7 @@ int comprimir(int argc, char *argv[])
    CrearTabla(Arbol, 0, 0);
 
    /* Crear fichero comprimido */
-   fs = fopen(argv[2], "wb");
+   fs = fopen(argv[2], "genoma.tgz");
    /* Escribir la longitud del fichero */
    fwrite(&Longitud, sizeof(long int), 1, fs);
    /* Cuenta el número de elementos de tabla */
@@ -122,7 +122,7 @@ int comprimir(int argc, char *argv[])
    }
 
    /* Codificación del fichero de entrada */
-   fe = fopen(argv[1], "r");
+   fe = fopen(argv[1], "genoma.dat");
    dWORD = 0; /* Valor inicial. */
    nBits = 0; /* Ningún bit */
    while((c = fgetc(fe)) != EOF)
@@ -339,7 +339,7 @@ int descomprimir(int argz, char *argt[])
 
    if(argz < 3)
    {
-      printf("Usar:\n%s <fichero_entrada> <fichero_salida>\n", argt[0]);
+      printf("Usar:\n%s <genoma.dat> <genoma.tgz>\n", argt[0]);
       return 1;
    }
 
@@ -347,7 +347,7 @@ int descomprimir(int argz, char *argt[])
    Arbolito = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
    Arbolito->letras = 0;
    Arbolito->uno = Arbolito->cero = NULL;
-   fe = fopen(argt[1], "rb");
+   fe = fopen(argt[1], "genoma.dat");
    fread(&Largo, sizeof(long int), 1, fe); /* Lee el número de caracteres */
    fread(&nElementas, sizeof(int), 1, fe); /* Lee el número de elementos */
    for(i = 0; i < nElementas; i++) /* Leer todos los elementos */
@@ -390,8 +390,8 @@ int descomprimir(int argz, char *argt[])
    }
    /* Leer datos comprimidos y extraer al fichero de salida */
    bitios = 0;
-   fs = fopen(argt[2], "w");
-   /* Lee los primeros cuatro bytes en la dobel palabra bitios */
+   fs = fopen(argt[2], "genoma.tgz");
+   /* Lee los primeros cuatro bytes en la doble palabra bitios */
    fread(&a, sizeof(char), 1, fe);
    bitios |= a;
    bitios <<= 8;
@@ -441,22 +441,25 @@ void BorrarArbolito(tipoNoda *n)
 }
 
 void printPermutations(char *str, char* permutations, int last, int index){
-   int i, len = strlen(str);
+    ofstream salida("genoma.dat",ios::app);
+    salida.clear();
+    int i, len = strlen(str);
    for ( i = 0; i < len; i++ ) {
       permutations[index] = str[i] ;
       if (index == last) {
-
-      permutations[last+1] = '\0';
-         cout<<permutations <<"\t";
+          permutations[last+1] = '\0';
+          cout<<permutations <<"\t";
+          salida<<permutations /*<< "\n" o << "\t"*/;
       }
-      else
-         printPermutations (str, permutations, last, index+1);}}
+      else {
+          printPermutations (str, permutations, last, index+1);
+         }}
+         salida.close();}
 
-int main()
-{
-    int opcion;
+int main(int argm, char *argn[])
+{   int opcion;
     do{
-        cout << "\n1.- Generar combinaciones genoma "
+        cout << "\n1.- Generar combinaciones y archivo genoma.dat "
              << "\n2.- comprimir"
              << "\n3.- descomprimir"
              << "\n4.- Salir"
@@ -465,19 +468,21 @@ int main()
 
         switch ( opcion ) {
 
-            case 1:{char str[] = "ATGC";
-            cout<<"Todas las permutaciones,CON REPETICION,de"<<str<<" son: "<<endl ;
+            case 1:{
+            char str[] = "ATGC";
+            cout<<"Todas las permutaciones,CON REPETICION,de "<<str<<" son: "<<endl ;
             int len = strlen(str) ;
             char permutations[len];
             printPermutations (str, permutations, len-1, 0);
-                      }
+                   }
                 break;
 
-            case 2:
+            case 2:{
+                    /*comprimir(1,"genoma.dat");*/}
 
                 break;
 
-            case 3:
+            case 3:/*descomprimir(2,"genoma.tgz");*/
 
                 break;
 
