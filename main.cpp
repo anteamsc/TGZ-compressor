@@ -441,54 +441,54 @@ void BorrarArbolito(tipoNoda *n)
 }
 
 void printPermutations(char *str, char* permutations, int last, int index){
-    ofstream salida("genoma.dat",ios::app);
-    salida.clear();
+    ofstream salida("genoma.dat",ios::app);/*abre fichero con opcion app*/
+    salida.clear();/*borra fichero*/
     int i, len = strlen(str);
    for ( i = 0; i < len; i++ ) {
       permutations[index] = str[i] ;
       if (index == last) {
-          permutations[last+1] = '\0';
-          cout<<permutations <<"\t";
-          salida<<permutations /*<< "\n" o << "\t"*/;
+          permutations[last+1] = '\0';/*ajuste para que no de 'basura'*/
+          cout<<permutations <<"\t";/*saca por pantalla los valores de la permutacion*/
+          salida<<permutations /*<< "\n" o << "\t"*/;/*escribe en fichero los valores de la permutacion*/
       }
       else {
           printPermutations (str, permutations, last, index+1);
          }}
-         salida.close();}
+         salida.close();}/*cierra fichero*/
 
-int main(int argm, char *argn[])
+int main(int argm, char *argn[])/*menu*/
 {   int opcion;
     do{
         cout << "\n1.- Generar combinaciones y archivo genoma.dat "
              << "\n2.- comprimir"
              << "\n3.- descomprimir"
              << "\n4.- Salir"
-             << "\nOPCION: ";
+             << "\nOPCION: ";/*opciones menu*/
         cin >> opcion;
 
         switch ( opcion ) {
 
             case 1:{
-            char str[] = "ATGC";
-            cout<<"Todas las permutaciones,CON REPETICION,de "<<str<<" son: "<<endl ;
+            char str[] = "ATGC";/*inicializa con valor de Amina Tiamina Guamina y Citosina*/
+            cout<<"Todas las permutaciones,CON REPETICION,de "<<str<<" son: "<<endl ;/*muestra el mensaje para dar por pantalla todos los valores de las permutaciones*/
             int len = strlen(str) ;
             char permutations[len];
-            printPermutations (str, permutations, len-1, 0);
+            printPermutations (str, permutations, len-1, 0);/*llama a la funcion*/
                    }
                 break;
 
             case 2:{
-                    comprimir(argm,&*argn);}
+                    comprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
 
             case 3:{
-                    descomprimir(argm,&*argn);}
+                    descomprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
 
             case 4:
-                cout << "\nFIN DEL PROGRAMA" << endl;
+                cout << "\nFIN DEL PROGRAMA" << endl;/*fin del programa*/
                 break;
 
             default:
