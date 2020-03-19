@@ -477,12 +477,14 @@ int main(int argm, char *argn[])/*menu*/
                    }
                 break;
 
-            case 2:{
+            case 2:{argm=5;
+                    *argn="genoma.dat";
                     comprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
 
-            case 3:{
+            case 3:{argm=5;
+                    *argn="genoma.tgz";
                     descomprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
@@ -499,26 +501,3 @@ int main(int argm, char *argn[])/*menu*/
 
     return 0;
 }
-
-    /*char cadena[128];
-   // Crea un fichero de salida
-   /*ofstream fs("genoma.tgz");
-
-   // Enviamos una cadena al fichero de salida:
-   /*fs << "Hola, mundo" << endl;
-   // Cerrar el fichero,
-   // para luego poder abrirlo para lectura:
-   fs.close();
-
-   // Abre un fichero de entrada
-   ifstream fe("genoma.tgz");
-
-   // Leeremos mediante getline, si lo hiciéramos
-   // mediante el operador << sólo leeríamos
-   // parte de la cadena:
-   fe.getline(cadena, 128);
-
-   cout << cadena << endl;
-    return 0;
-*/
-
