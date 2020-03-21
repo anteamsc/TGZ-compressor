@@ -61,13 +61,13 @@ int comprimir(int argc, char *argv[])
 
    if(argc < 3)
    {
-      printf("Usar:\n%s <fichero_entrada> <fichero_salida>\n", argv[0]);
+      printf("Usar:\n%s <genoma.dat> <genoma.tgz>\n", argv[0]);
       return 1;
    }
 
    Lista = NULL;
    /* Fase 1: contar frecuencias */
-   fe = fopen(argv[1], "genoma.dat");
+   fe = fopen("genoma.dat","r+");
    while((c = fgetc(fe)) != EOF)
    {
       Longitud++;       /* Actualiza la cuenta de la longitud del fichero */
@@ -98,7 +98,7 @@ int comprimir(int argc, char *argv[])
    CrearTabla(Arbol, 0, 0);
 
    /* Crear fichero comprimido */
-   fs = fopen(argv[2], "genoma.tgz");
+   fs = fopen("genoma.tgz","w+");
    /* Escribir la longitud del fichero */
    fwrite(&Longitud, sizeof(long int), 1, fs);
    /* Cuenta el número de elementos de tabla */
@@ -347,7 +347,7 @@ int descomprimir(int argz, char *argt[])
    Arbolito = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
    Arbolito->letras = 0;
    Arbolito->uno = Arbolito->cero = NULL;
-   fe = fopen(argt[1], "genoma.dat");
+   fe = fopen("genoma.dat","r+");
    fread(&Largo, sizeof(long int), 1, fe); /* Lee el número de caracteres */
    fread(&nElementas, sizeof(int), 1, fe); /* Lee el número de elementos */
    for(i = 0; i < nElementas; i++) /* Leer todos los elementos */
@@ -390,7 +390,7 @@ int descomprimir(int argz, char *argt[])
    }
    /* Leer datos comprimidos y extraer al fichero de salida */
    bitios = 0;
-   fs = fopen(argt[2], "genoma.tgz");
+   fs = fopen("genoma.tgz","w+");
    /* Lee los primeros cuatro bytes en la doble palabra bitios */
    fread(&a, sizeof(char), 1, fe);
    bitios |= a;
@@ -477,14 +477,12 @@ int main(int argm, char *argn[])/*menu*/
                    }
                 break;
 
-            case 2:{argm=5;
-                    *argn="genoma.dat";
+            case 2:{argm=1;
                     comprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
 
-            case 3:{argm=5;
-                    *argn="genoma.tgz";
+            case 3:{argm=2;
                     descomprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
@@ -501,3 +499,26 @@ int main(int argm, char *argn[])/*menu*/
 
     return 0;
 }
+
+    /*char cadena[128];
+   // Crea un fichero de salida
+   /*ofstream fs("genoma.tgz");
+
+   // Enviamos una cadena al fichero de salida:
+   /*fs << "Hola, mundo" << endl;
+   // Cerrar el fichero,
+   // para luego poder abrirlo para lectura:
+   fs.close();
+
+   // Abre un fichero de entrada
+   ifstream fe("genoma.tgz");
+
+   // Leeremos mediante getline, si lo hiciéramos
+   // mediante el operador << sólo leeríamos
+   // parte de la cadena:
+   fe.getline(cadena, 128);
+
+   cout << cadena << endl;
+    return 0;
+*/
+
