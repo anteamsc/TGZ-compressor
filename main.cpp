@@ -339,7 +339,7 @@ int descomprimir(int argz, char *argt[])
 
    if(argz < 3)
    {
-      printf("Usar:\n%s <genoma.dat> <genoma.tgz>\n", argt[0]);
+      printf("Usar:\n%s <genoma.tgz> <genoma.dat>\n", argt[0]);
       return 1;
    }
 
@@ -347,7 +347,7 @@ int descomprimir(int argz, char *argt[])
    Arbolito = (tipoNoda *)malloc(sizeof(tipoNoda)); /* un nodo nuevo */
    Arbolito->letras = 0;
    Arbolito->uno = Arbolito->cero = NULL;
-   fe = fopen("genoma.dat","r+");
+   fe = fopen("genoma.tgz","r+");
    fread(&Largo, sizeof(long int), 1, fe); /* Lee el número de caracteres */
    fread(&nElementas, sizeof(int), 1, fe); /* Lee el número de elementos */
    for(i = 0; i < nElementas; i++) /* Leer todos los elementos */
@@ -390,7 +390,7 @@ int descomprimir(int argz, char *argt[])
    }
    /* Leer datos comprimidos y extraer al fichero de salida */
    bitios = 0;
-   fs = fopen("genoma.tgz","w+");
+   fs = fopen("genoma.dat","w+");
    /* Lee los primeros cuatro bytes en la doble palabra bitios */
    fread(&a, sizeof(char), 1, fe);
    bitios |= a;
@@ -482,7 +482,7 @@ int main(int argm, char *argn[])/*menu*/
 
                 break;
 
-            case 3:{argm=2;
+            case 3:{argm=4;
                     descomprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
