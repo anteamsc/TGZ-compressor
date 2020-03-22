@@ -477,7 +477,7 @@ int main(int argm, char *argn[])/*menu*/
                    }
                 break;
 
-            case 2:{argm=1;
+            case 2:{argm=4;
                     comprimir(argm,&*argn);}/*llama a comprimir pasando valores*/
 
                 break;
