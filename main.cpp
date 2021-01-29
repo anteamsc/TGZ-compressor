@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <cstring>
 #include <malloc.h>
+#define LIMITE 4
 using namespace std;
 struct nodo
 {
@@ -23,6 +24,7 @@ struct nodo
 int NSIMB=0,nsimb;
 FILE *f,*g;
 int NBYTES=0;
+char *tabla [256];
 
 /*--------------------------------
 preparar las hojas
@@ -365,27 +367,58 @@ int descomprimir(char *origen, char *destino)
 void printPermutations(char *str, char* permutations, int last, int index){
     ofstream salida("genoma.dat",ios::app);/*abre fichero con opcion app*/
     salida.clear();/*borra fichero*/
-    int i, len = strlen(str);
-   for ( i = 0; i < len; i++ ) {
+     int i, len = strlen(str);
+   for (i = 0; i < len; i++ ) {
       permutations[index] = str[i] ;
       if (index == last) {
           permutations[last+1] = '\0';/*ajuste para que no de 'basura'*/
           cout<<permutations <<"\t";/*saca por pantalla los valores de la permutacion*/
-          salida<<permutations /*<< "\n" o << "\t"*/;/*escribe en fichero los valores de la permutacion*/
+          salida<<permutations<<" "<<endl; /*<< "\n" o << "\t"*/;/*escribe en fichero los valores de la permutacion*/
+         /* strcpy(tabla[i],permutations);*/
+
       }
       else {
           printPermutations (str, permutations, last, index+1);
-         }}
+         };}
          salida.close();}/*cierra fichero*/
+void compresor(){
+    ifstream entrada;
+    ifstream genoma;
+    ofstream comprimido("comprimido.dat",ios::app);
+    string dato,dat3,dat8[256];
+    entrada.open("entrada.dat");
+    genoma.open("genoma.dat");
+    if(!entrada | !genoma)
+    cout << "Error abriendo el fichero" << endl;
+    else
+    {  int i=0;
+        while(genoma>>dat3){
+            dat8[i]==dat3;
+            i++;
+        };
+        while(entrada>>dato){
+                cout << dato << endl;
+                int j=0;
+                do {
+                   if (dato.compare(dat8[j]) != 0) {comprimido<<j;}
+                    j++;
+                       }while(j<256);
 
+            };
+            entrada.close();
+            genoma.close();
+            comprimido.close();
+}
+};
 int main(int argc, char *argv[])/*menu*/
 {   int j;
     int opcion;
     do{
         cout << "\n1.- Generar combinaciones y archivo genoma.dat "
-             << "\n2.- comprimir"
-             << "\n3.- descomprimir"
-             << "\n4.- Salir"
+             << "\n2.- comprimir HUFFMAN genoma.dat"
+             << "\n3.- descomprimir HUFFMAN genoma.dat"
+             <<"\n4.- compresion propia"
+             << "\n0.- Salir"
              << "\nOPCION: ";/*opciones menu*/
         cin >> opcion;
 
@@ -433,8 +466,23 @@ int main(int argc, char *argv[])/*menu*/
                                 };
 
                 break;
-
-            case 4:
+            case 4:{compresor();
+                    if (preparar_hojas("comprimido.dat")){
+                    printf("error abriendo archivo\n");
+                    return 0;
+                    }
+                    preparar_telar();
+                    tejer();
+                    codificar();
+                    if (escribe_cabecera("comprimido.tgz")){
+                    printf("error abriendo archivo\n");
+                    return 0;
+                    }
+                    if (comprimir("comprimido.dat","comprimido.tgz")){
+                    printf("error abriendo archivo\n");
+                    return 0;};};
+                break;
+            case 0:
                 cout << "\nFIN DEL PROGRAMA" << endl;/*fin del programa*/
                 break;
 
@@ -442,7 +490,7 @@ int main(int argc, char *argv[])/*menu*/
                 break;
         }
 
-    } while( opcion != 4 );
+    } while( opcion != 0 );
 
     return 0;
 }
