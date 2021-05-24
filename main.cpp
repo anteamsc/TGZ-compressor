@@ -410,23 +410,61 @@ void compresor(){
             comprimido.close();
 }
 };
+void descompresor(){
+    ifstream genoma;
+    ifstream comprimido("comprimido.dat",ios::app);
+    ofstream salida("salida.dat",ios::app);
+    string dato,dat3,dat8[256];
+    genoma.open("genoma.dat");
+    if(!comprimido || !genoma || !salida)
+    cout << "Error abriendo el fichero" << endl;
+    else
+    {  int i=0;
+        while(genoma>>dat3){
+            dat8[i]==dat3;
+            i++;
+        };
+        { /* descomprimir */
+                          if (descomprimir("comprimido.tgz","comprimido.dat")){
+                              printf("error abriendo archivo\n");
+                                               }
+
+                            preparar_telar();
+                            tejer();
+                            codificar();
+                            debug();
+                                };
+        while(comprimido>>dato){
+                cout << dato << endl;
+                int j=0;
+                do {
+                   if (dato.compare(dat8[j]) != 0) {salida<<j;}
+                    j++;
+                       }while(j<256);
+
+            };
+            genoma.close();
+            comprimido.close();
+}
+};
 int main(int argc, char *argv[])/*menu*/
 {   int j;
     int opcion;
     do{
-        cout << "\n1.- Generar combinaciones y archivo genoma.dat "
-             << "\n2.- comprimir HUFFMAN genoma.dat"
-             << "\n3.- descomprimir HUFFMAN genoma.dat"
-             <<"\n4.- compresion propia"
-             << "\n0.- Salir"
-             << "\nOPCION: ";/*opciones menu*/
+        cout << "\n1.- Generar combinaciones y archivo genoma.dat /Build combinations & genoma.dat file"
+             << "\n2.- comprimir HUFFMAN genoma.dat /compress HUFFMAN genoma.dat"
+             << "\n3.- descomprimir HUFFMAN genoma.dat/decompress HUFFMAN genoma.dat"
+             <<"\n4.- compresion propia/own compression"
+             <<"\n5.-descompresion propia/decompression own"
+             << "\n0.- Salir/Exit"
+             << "\nOPCION: /OPTION:";/*opciones menu*/
         cin >> opcion;
 
         switch ( opcion ) {
 
             case 1:{
             char str[] = "ATGC";/*inicializa con valor de Amina Tiamina Guamina y Citosina*/
-            cout<<"Todas las permutaciones,CON REPETICION,de "<<str<<" son: "<<endl ;/*muestra el mensaje para dar por pantalla todos los valores de las permutaciones*/
+            cout<<"Todas las permutaciones,CON REPETICION,de/All permutation with REPETION "<<str<<" son:/are: "<<endl ;/*muestra el mensaje para dar por pantalla todos los valores de las permutaciones*/
             int len = strlen(str) ;
             char permutations[len];
             printPermutations (str, permutations, len-1, 0);/*llama a la funcion*/
@@ -435,18 +473,18 @@ int main(int argc, char *argv[])/*menu*/
 
             case 2:{ /* comprimir */
                     if (preparar_hojas("genoma.dat")){
-                    printf("error abriendo archivo\n");
+                    printf("error abriendo archivo/Error opening file \n");
                     return 0;
                     }
                     preparar_telar();
                     tejer();
                     codificar();
                     if (escribe_cabecera("genoma.tgz")){
-                    printf("error abriendo archivo\n");
+                    printf("error abriendo archivo/Error opening file \n");
                     return 0;
                     }
                     if (comprimir("genoma.dat","genoma.tgz")){
-                    printf("error abriendo archivo\n");
+                    printf("error abriendo archivo/Error opening file \n");
                     return 0;
                     }
                             /*comprimir("genoma.dat","genoma.tgz");*/
@@ -455,7 +493,7 @@ int main(int argc, char *argv[])/*menu*/
 
             case 3:{ /* descomprimir */
                           if (descomprimir("genoma.tgz","genoma.dat")){
-                              printf("error abriendo archivo\n");
+                              printf("error abriendo archivo/Error opening file \n");
                               return 0;
                             }
 
@@ -468,22 +506,25 @@ int main(int argc, char *argv[])/*menu*/
                 break;
             case 4:{compresor();
                     if (preparar_hojas("comprimido.dat")){
-                    printf("error abriendo archivo\n");
+                    printf("error abriendo archivo/Error opening file \n");
                     return 0;
                     }
                     preparar_telar();
                     tejer();
                     codificar();
                     if (escribe_cabecera("comprimido.tgz")){
-                    printf("error abriendo archivo\n");
+                    printf("error abriendo archivo/Error opening file \n");
                     return 0;
                     }
                     if (comprimir("comprimido.dat","comprimido.tgz")){
-                    printf("error abriendo archivo\n");
-                    return 0;};};
+                    printf("error abriendo archivo/Error opening file \n");
+                    return 0;};
+                    };
+                break;
+            case 5:{descompresor();};
                 break;
             case 0:
-                cout << "\nFIN DEL PROGRAMA" << endl;/*fin del programa*/
+                cout << "\nFIN DEL PROGRAMA/END OF PROGRAM" << endl;/*fin del programa*/
                 break;
 
             default:

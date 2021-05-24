@@ -10,7 +10,7 @@
 	<stdlib.h>
 	<cstring>
 
-1585743009 source:c:\users\administrador\desktop\compresortgz\main.cpp
+1612298861 source:c:\users\administrador\desktop\compresortgz\main.cpp
 	<string>
 	<vector>
 	<iostream>
@@ -24,5 +24,17 @@
 
 1585425706 source:c:\users\administrador\desktop\compresortgz\huffman.cpp
 	<stdio.h>
+	<malloc.h>
+
+1621877378 source:d:\compresortgz\main.cpp
+	<string>
+	<vector>
+	<iostream>
+	<algorithm>
+	<array>
+	<fstream>
+	<stdio.h>
+	<stdlib.h>
+	<cstring>
 	<malloc.h>
 
